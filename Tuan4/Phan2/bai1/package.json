@@ -1,0 +1,9 @@
+{
+  "name": "bai1-node-docker",
+  "version": "1.0.0",
+  "description": "Simple Node.js app for Docker exercise",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
