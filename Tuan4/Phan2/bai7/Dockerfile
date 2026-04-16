@@ -7,5 +7,4 @@ WORKDIR /app
 
 COPY app.py .
 
-# Chạy ứng dụng
 CMD ["python", "app.py"]

@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  react-app:
+    build: .
+    container_name: react_nginx
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=512"

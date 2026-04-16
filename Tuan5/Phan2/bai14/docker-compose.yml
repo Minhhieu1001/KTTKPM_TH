@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app1:
+    build: ./app1
+    container_name: service_app1
+    restart: always
+    ports:
+      - "5001:5001"
+    networks:
+      - custom_network
+    environment:
+      SERVICE_NAME: app1
+
+  app2:
+    build: ./app2
+    container_name: service_app2
+    restart: always
+    ports:
+      - "5002:5002"
+    networks:
+      - custom_network
+    environment:
+      SERVICE_NAME: app2
+    depends_on:
+      - app1
+
+networks:
+  custom_network:
+    driver: bridge

@@ -1,0 +1,72 @@
+services:
+  vote:
+    image: dockersamples/examplevotingapp_vote:before
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "5000:80"
+    networks:
+      - front
+      - back
+
+  result:
+    image: dockersamples/examplevotingapp_result:before
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5001:80"
+    networks:
+      - front
+      - back
+
+  worker:
+    image: dockersamples/examplevotingapp_worker
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - back
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - back
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: votes
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d votes"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - back
+
+volumes:
+  postgres_data:
+
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge

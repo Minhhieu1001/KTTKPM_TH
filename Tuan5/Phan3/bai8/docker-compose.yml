@@ -1,0 +1,52 @@
+services:
+  django:
+    build: ./app
+    restart: unless-stopped
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      DB_PATH: /app/data/db.sqlite3
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - django_data:/app/data
+    networks:
+      - celery_net
+
+  celery-worker:
+    build: ./app
+    restart: unless-stopped
+    command: sh -c "python manage.py migrate && celery -A config worker --loglevel=info"
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      DB_PATH: /app/data/db.sqlite3
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - django_data:/app/data
+    networks:
+      - celery_net
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - celery_net
+
+volumes:
+  django_data:
+
+networks:
+  celery_net:
+    driver: bridge

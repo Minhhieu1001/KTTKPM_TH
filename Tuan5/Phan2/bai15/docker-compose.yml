@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis_limited
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    # Giới hạn tài nguyên cho container
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'        # Giới hạn CPU: 0.5 core
+          memory: 256M       # Giới hạn RAM: 256MB
+        reservations:
+          cpus: '0.25'       # Dự trữ tối thiểu: 0.25 core
+          memory: 128M       # Dự trữ tối thiểu: 128MB
+    command: redis-server --appendonly yes
+
+  # Optional: Redis Client để test
+  redis-client:
+    image: redis:7-alpine
+    container_name: redis_cli
+    restart: always
+    ports:
+      - "6380:6379"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+    command: redis-server --port 6380
+
+volumes:
+  redis_data:
+    driver: local

@@ -1,0 +1,13 @@
+{
+  "name": "node-mongo-compose-demo",
+  "version": "1.0.0",
+  "description": "Simple REST API for Docker Compose exercise",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  }
+}
