@@ -48,9 +48,9 @@ async function initDB(retries = 10, delay = 3000) {
       if (rows.length === 0) {
         const seedFoods = [
           { name: 'Phở Bò', price: 50000, image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=500&q=80', description: 'Phở bò truyền thống' },
-          { name: 'Bánh Mì Thịt', price: 25000, image: 'https://images.unsplash.com/photo-1601050638917-3f0483810ef8?w=500&q=80', description: 'Bánh mì thịt nướng đặc biệt' },
-          { name: 'Cà Phê Sữa Đá', price: 20000, image: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?w=500&q=80', description: 'Cà phê rang xay nguyên chất' },
-          { name: 'Bún Chả', price: 45000, image: 'https://images.unsplash.com/photo-1562967914-6c8ef81da6a5?w=500&q=80', description: 'Bún chả Hà Nội nướng than hồng' }
+          { name: 'Bánh Mì Thịt', price: 25000, image: 'https://anhquanbakery.com/uploads/product/full_48nkjk0y-1267-banh-mi-thit-cha-dac-biet.jpg', description: 'Bánh mì thịt nướng đặc biệt' },
+          { name: 'Cà Phê Sữa Đá', price: 20000, image: 'https://cdn.tgdd.vn/2020/07/CookProduct/ava-1200x676-7.jpg', description: 'Cà phê rang xay nguyên chất' },
+          { name: 'Bún Chả', price: 45000, image: 'https://www.seriouseats.com/thmb/hkFO1hMrtLXYcW9FRFsuRRgC_JE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20231204-SEA-VyTran-BunChaHanoi-22-f8b6e4838ceb4807b92368052c79e8f9.jpg', description: 'Bún chả Hà Nội nướng than hồng' }
         ];
         for (const food of seedFoods) {
           await pool.query('INSERT INTO foods (name, price, image, description) VALUES (?, ?, ?, ?)', [food.name, food.price, food.image, food.description]);
